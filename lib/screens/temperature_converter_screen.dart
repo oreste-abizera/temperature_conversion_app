@@ -5,8 +5,17 @@ import '../widgets/conversion_selector.dart';
 import '../widgets/temperature_section.dart';
 import '../widgets/conversion_history_section.dart';
 
+/// The main screen of the Temperature Converter app.
+///
+/// This screen manages the state of the temperature conversion process and
+/// provides a responsive layout that adapts to both portrait and landscape
+/// orientations. It handles:
+/// - User input validation
+/// - Temperature conversion
+/// - Conversion history tracking
+/// - Layout management
 class TemperatureConverterScreen extends StatefulWidget {
-  const TemperatureConverterScreen({Key? key}) : super(key: key);
+  const TemperatureConverterScreen({super.key});
 
   @override
   State<TemperatureConverterScreen> createState() =>
@@ -15,9 +24,16 @@ class TemperatureConverterScreen extends StatefulWidget {
 
 class _TemperatureConverterScreenState
     extends State<TemperatureConverterScreen> {
+  // Controller for the input text field
   final TextEditingController _inputController = TextEditingController();
+
+  // Tracks the current conversion direction (F→C or C→F)
   bool _isFahrenheitToCelsius = true;
+
+  // Stores the most recent conversion result
   double? _convertedValue;
+
+  // Maintains the history of all conversions
   List<ConversionHistory> _conversionHistory = [];
 
   @override
@@ -26,7 +42,15 @@ class _TemperatureConverterScreenState
     super.dispose();
   }
 
+  /// Handles the temperature conversion process.
+  ///
+  /// This method:
+  /// 1. Validates the input value
+  /// 2. Performs the conversion
+  /// 3. Updates the conversion history
+  /// 4. Updates the UI state
   void _handleConversion() {
+    // Validate empty input
     if (_inputController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please enter a temperature value')),
@@ -34,6 +58,7 @@ class _TemperatureConverterScreenState
       return;
     }
 
+    // Validate numeric input
     final inputValue = double.tryParse(_inputController.text);
     if (inputValue == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -42,6 +67,7 @@ class _TemperatureConverterScreenState
       return;
     }
 
+    // Perform conversion and update history
     final convertedValue =
         convertTemperature(inputValue, _isFahrenheitToCelsius);
     final historyEntry = ConversionHistory(
@@ -67,6 +93,7 @@ class _TemperatureConverterScreenState
         backgroundColor: Colors.blue,
         centerTitle: true,
       ),
+      // Use OrientationBuilder to create responsive layouts
       body: OrientationBuilder(
         builder: (context, orientation) {
           if (orientation == Orientation.portrait) {
@@ -79,6 +106,13 @@ class _TemperatureConverterScreenState
     );
   }
 
+  /// Builds the portrait layout of the app.
+  ///
+  /// This layout arranges components vertically:
+  /// - Conversion selector at the top
+  /// - Temperature input/output in the middle
+  /// - Convert button below
+  /// - History section at the bottom
   Widget _buildPortraitLayout() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -134,6 +168,11 @@ class _TemperatureConverterScreenState
     );
   }
 
+  /// Builds the landscape layout of the app.
+  ///
+  /// This layout arranges components horizontally:
+  /// - Conversion controls on the left
+  /// - History section on the right
   Widget _buildLandscapeLayout() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
