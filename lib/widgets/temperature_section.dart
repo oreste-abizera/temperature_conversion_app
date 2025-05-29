@@ -28,10 +28,11 @@ class TemperatureSection extends StatelessWidget {
             inputFormatters: [
               FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d*')),
             ],
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
+            decoration: InputDecoration(
+              hintText: 'Enter temperature',
+              prefixIcon: const Icon(Icons.thermostat_outlined),
               contentPadding:
-                  EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             ),
             style: const TextStyle(fontSize: 18),
             textAlign: TextAlign.center,
@@ -39,28 +40,55 @@ class TemperatureSection extends StatelessWidget {
           ),
         ),
 
-        // Equals sign
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            '=',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        // Equals sign with animation
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            child: Text(
+              '=',
+              key: ValueKey<double?>(convertedValue),
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
           ),
         ),
 
-        // Result display
+        // Result display with animation
         Expanded(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey),
-              borderRadius: BorderRadius.circular(4.0),
-              color: Colors.grey.shade100,
+              color: convertedValue != null
+                  ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
+                  : Colors.grey.shade100,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: convertedValue != null
+                    ? Theme.of(context).colorScheme.primary
+                    : Colors.grey.shade300,
+              ),
             ),
-            child: Text(
-              convertedValue?.toStringAsFixed(2) ?? '',
-              style: const TextStyle(fontSize: 18),
-              textAlign: TextAlign.center,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              child: Text(
+                convertedValue?.toStringAsFixed(1) ?? '',
+                key: ValueKey<double?>(convertedValue),
+                style: TextStyle(
+                  fontSize: 18,
+                  color: convertedValue != null
+                      ? Theme.of(context).colorScheme.primary
+                      : Colors.grey,
+                  fontWeight: convertedValue != null
+                      ? FontWeight.bold
+                      : FontWeight.normal,
+                ),
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
         ),

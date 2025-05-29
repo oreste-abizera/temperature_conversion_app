@@ -87,21 +87,33 @@ class _TemperatureConverterScreenState
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Converter',
-          style: TextStyle(color: Colors.white),
+          'Temperature Converter',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.blue,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         centerTitle: true,
+        elevation: 0,
       ),
-      // Use OrientationBuilder to create responsive layouts
-      body: OrientationBuilder(
-        builder: (context, orientation) {
-          if (orientation == Orientation.portrait) {
-            return _buildPortraitLayout();
-          } else {
-            return _buildLandscapeLayout();
-          }
-        },
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Theme.of(context).colorScheme.primary.withOpacity(0.1),
+              Colors.white,
+            ],
+          ),
+        ),
+        child: OrientationBuilder(
+          builder: (context, orientation) {
+            if (orientation == Orientation.portrait) {
+              return _buildPortraitLayout();
+            } else {
+              return _buildLandscapeLayout();
+            }
+          },
+        ),
       ),
     );
   }
@@ -119,49 +131,71 @@ class _TemperatureConverterScreenState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ConversionSelector(
-            isFahrenheitToCelsius: _isFahrenheitToCelsius,
-            onChanged: (value) {
-              setState(() {
-                _isFahrenheitToCelsius = value;
-                _convertedValue = null;
-              });
-            },
-          ),
-          const SizedBox(height: 20),
-          TemperatureSection(
-            inputController: _inputController,
-            convertedValue: _convertedValue,
-            onInputChanged: () {
-              if (_convertedValue != null) {
-                setState(() {
-                  _convertedValue = null;
-                });
-              }
-            },
-          ),
-          const SizedBox(height: 20),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: _handleConversion,
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                backgroundColor: Colors.grey.shade300,
-                foregroundColor: Colors.black,
-              ),
-              child: const Text(
-                'CONVERT',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+          Card(
+            elevation: 2,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ConversionSelector(
+                    isFahrenheitToCelsius: _isFahrenheitToCelsius,
+                    onChanged: (value) {
+                      setState(() {
+                        _isFahrenheitToCelsius = value;
+                        _convertedValue = null;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  TemperatureSection(
+                    inputController: _inputController,
+                    convertedValue: _convertedValue,
+                    onInputChanged: () {
+                      if (_convertedValue != null) {
+                        setState(() {
+                          _convertedValue = null;
+                        });
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _handleConversion,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        foregroundColor: Colors.white,
+                      ),
+                      child: const Text(
+                        'CONVERT',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
           const SizedBox(height: 20),
           Expanded(
-            child: ConversionHistorySection(history: _conversionHistory),
+            child: Card(
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ConversionHistorySection(history: _conversionHistory),
+              ),
+            ),
           ),
         ],
       ),
@@ -177,59 +211,81 @@ class _TemperatureConverterScreenState
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             flex: 1,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ConversionSelector(
-                  isFahrenheitToCelsius: _isFahrenheitToCelsius,
-                  onChanged: (value) {
-                    setState(() {
-                      _isFahrenheitToCelsius = value;
-                      _convertedValue = null;
-                    });
-                  },
-                ),
-                const SizedBox(height: 20),
-                TemperatureSection(
-                  inputController: _inputController,
-                  convertedValue: _convertedValue,
-                  onInputChanged: () {
-                    if (_convertedValue != null) {
-                      setState(() {
-                        _convertedValue = null;
-                      });
-                    }
-                  },
-                ),
-                const SizedBox(height: 20),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _handleConversion,
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      backgroundColor: Colors.grey.shade300,
-                      foregroundColor: Colors.black,
-                    ),
-                    child: const Text(
-                      'CONVERT',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+            child: Card(
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ConversionSelector(
+                        isFahrenheitToCelsius: _isFahrenheitToCelsius,
+                        onChanged: (value) {
+                          setState(() {
+                            _isFahrenheitToCelsius = value;
+                            _convertedValue = null;
+                          });
+                        },
                       ),
-                    ),
+                      const SizedBox(height: 20),
+                      TemperatureSection(
+                        inputController: _inputController,
+                        convertedValue: _convertedValue,
+                        onInputChanged: () {
+                          if (_convertedValue != null) {
+                            setState(() {
+                              _convertedValue = null;
+                            });
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: _handleConversion,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
+                            foregroundColor: Colors.white,
+                          ),
+                          child: const Text(
+                            'CONVERT',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
           ),
-          const SizedBox(width: 20),
+          const SizedBox(width: 16),
           Expanded(
             flex: 1,
-            child: ConversionHistorySection(history: _conversionHistory),
+            child: Card(
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ConversionHistorySection(history: _conversionHistory),
+              ),
+            ),
           ),
         ],
       ),
